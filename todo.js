@@ -1,0 +1,32 @@
+var fs = require('fs'); // file system 文件系统
+
+const verb = process.argv[2] // add
+const content = process.argv[3] // 砸瓦鲁多
+if (verb === 'add') {
+    fs.stat('C:\\Users\\asus\\Desktop\\node-todo-demo\\db', function (err, stat) {
+        if (err == null) { // 文件存在
+            const fileContent = fs.readFileSync('C:\\Users\\asus\\Desktop\\node-todo-demo\\db').toString()
+            const list = JSON.parse(fileContent) // 反序列化
+
+            const task = content // 获取任务
+            list.push(task) // 存入任务到 list
+            fs.writeFileSync('C:\\Users\\asus\\Desktop\\node-todo-demo\\db', JSON.stringify(list)) // 序列化并存入数据库
+            console.log(list)
+        } else if (err.code === 'ENOENT') { // 文件不存在
+            fs.writeFileSync('C:\\Users\\asus\\Desktop\\node-todo-demo\\db', '') // 序列化
+            const list = []
+
+            const task = content
+            list.push(task)
+            fs.writeFileSync('C:\\Users\\asus\\Desktop\\node-todo-demo\\db', JSON.stringify(list)) // 序列化
+            console.log(list)
+        } else { // 其他
+            console.log('Some other error: ', err.code)
+        }
+    })
+}else {
+    console.log('你的动词是：' + verb)
+    console.log('我不知道你想干啥')
+}
+
+
