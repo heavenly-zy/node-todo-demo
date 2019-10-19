@@ -2,6 +2,7 @@ var fs = require('fs'); // file system 文件系统
 
 const verb = process.argv[2] // add
 const content = process.argv[3] // 砸瓦鲁多
+const editContent = process.argv[4]
 if (verb === 'add') {
     fs.stat('C:\\Users\\asus\\Desktop\\node-todo-demo\\db', function (err, stat) {
         if (err == null) { // 文件存在
@@ -40,6 +41,13 @@ if (verb === 'add') {
     const list = JSON.parse(fileContent)
     const n = content
     list[n - 1][1] = true
+    console.log(list)
+    fs.writeFileSync('C:\\Users\\asus\\Desktop\\node-todo-demo\\db', JSON.stringify(list))
+} else if(verb === 'edit'){
+    const fileContent = fs.readFileSync('C:\\Users\\asus\\Desktop\\node-todo-demo\\db').toString()
+    const list = JSON.parse(fileContent)
+    const n = content
+    list[n - 1][0] = editContent
     console.log(list)
     fs.writeFileSync('C:\\Users\\asus\\Desktop\\node-todo-demo\\db', JSON.stringify(list))
 } else {
