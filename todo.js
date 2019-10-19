@@ -35,6 +35,13 @@ if (verb === 'add') {
     list.splice(n - 1, 1)
     console.log(list)
     fs.writeFileSync('C:\\Users\\asus\\Desktop\\node-todo-demo\\db', JSON.stringify(list))
+} else if (verb === 'done') {
+    const fileContent = fs.readFileSync('C:\\Users\\asus\\Desktop\\node-todo-demo\\db').toString()
+    const list = JSON.parse(fileContent)
+    const n = content
+    list[n - 1][1] = true
+    console.log(list)
+    fs.writeFileSync('C:\\Users\\asus\\Desktop\\node-todo-demo\\db', JSON.stringify(list))
 } else {
     console.log('你的动词是：' + verb)
     console.log('我不知道你想干啥')
