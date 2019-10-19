@@ -24,7 +24,11 @@ if (verb === 'add') {
             console.log('Some other error: ', err.code)
         }
     })
-}else {
+} else if (verb === 'list') {
+    const fileContent = fs.readFileSync('C:\\Users\\asus\\Desktop\\node-todo-demo\\db').toString()
+    const list = JSON.parse(fileContent) // 反序列化
+    console.log(list)
+} else {
     console.log('你的动词是：' + verb)
     console.log('我不知道你想干啥')
 }
