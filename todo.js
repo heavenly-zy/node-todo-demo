@@ -1,10 +1,12 @@
 var fs = require('fs'); // file system 文件系统
-
+var path = require('path')
 const verb = process.argv[2] // add
 const content = process.argv[3] // 任务内容
 const editContent = process.argv[4]
-const dbPath = 'C:\\Users\\asus\\Desktop\\node-todo-demo\\db'
-
+const dbPath = path.join(__dirname,'db') // __dirname保证一定是当前目录的相对路径
+// path.join() 方法使用平台特定的分隔符将 path 片段连接在一起
+// Windows用 '\\'
+// 其他系统 '/'
 
 ensureDbExist()
 
