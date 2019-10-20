@@ -4,30 +4,19 @@ const verb = process.argv[2] // add
 const content = process.argv[3] // 任务内容
 const editContent = process.argv[4]
 const dbPath = 'C:\\Users\\asus\\Desktop\\node-todo-demo\\db'
-
 let list, n
+try {
+    fs.statSync(dbPath)
+} catch (error) {
+    fs.writeFileSync(dbPath, '') // 保证db文件一定存在
+}
 
 switch (verb) {
     case 'add':
-        fs.stat(dbPath, function (err, stat) {
-            if (err == null) { // 文件存在
-                list = fetchFromDb()
-
-                addTask(list, content)
-                saveToDb(list)
-                displayList(list)
-            } else if (err.code === 'ENOENT') { // 文件不存在
-                fs.writeFileSync(dbPath, '') // 序列化
-                list = []
-
-
-                addTask(list, content)
-                saveToDb(list) // 序列化
-                displayList(list)
-            } else { // 其他
-                console.log('Some other error: ', err.code)
-            }
-        })
+        list = fetchFromDb()
+        addTask(list, content)
+        saveToDb(list)
+        displayList(list)
         break;
     case 'list':
         list = fetchFromDb()
