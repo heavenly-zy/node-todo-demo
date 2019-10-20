@@ -4,57 +4,59 @@ const verb = process.argv[2] // add
 const content = process.argv[3] // 任务内容
 const editContent = process.argv[4]
 const dbPath = 'C:\\Users\\asus\\Desktop\\node-todo-demo\\db'
-let list, n
-try {
-    fs.statSync(dbPath)
-} catch (error) {
-    fs.writeFileSync(dbPath, '') // 保证db文件一定存在
-}
+
+
+ensureDbExist()
+
+const list = fetchFromDb()
+const n = content // 用户从 1 开始删除
 
 switch (verb) {
     case 'add':
-        list = fetchFromDb()
         addTask(list, content)
-        saveToDb(list)
-        displayList(list)
         break;
     case 'list':
-        list = fetchFromDb()
-        displayList(list)
         break;
     case 'delete':
-        list = fetchFromDb()
-        n = content // 用户从 1 开始删除
         removeTask(list, n)
-        displayList(list)
-        saveToDb(list)
         break;
     case 'done':
-        list = fetchFromDb()
-        n = content
         markTaskAsDone(list, n)
-        displayList(list)
-        saveToDb(list)
         break;
     case 'edit':
-        list = fetchFromDb()
-        n = content
         editTask(list, n, editContent)
-        displayList(list)
-        saveToDb(list)
         break;
     default:
         console.log('你的动词是：' + verb)
         console.log('我不知道你想干啥')
         break;
 }
+displayList(list)
+if (verb !== 'list') {
+    saveToDb(list)
+}
 
+
+// 下面是工具函数
+
+function ensureDbExist(){ // 保证db文件一定存在
+    try {
+        fs.statSync(dbPath)
+    } catch (error) {
+        fs.writeFileSync(dbPath, '') 
+    }
+}
 function saveToDb(list) { // 存入数据库
     fs.writeFileSync(dbPath, JSON.stringify(list)) // 序列化
 }
 function fetchFromDb() { // 读取数据库
     const fileContent = fs.readFileSync(dbPath).toString()
-    list = JSON.parse(fileContent) // 反序列化
+    let list
+    try {
+        list = JSON.parse(fileContent) || []// 反序列化
+    } catch (error) {
+        list = [] // 保证db文件内容一定为数组
+    }
     return list
 
 }
